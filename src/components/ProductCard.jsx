@@ -1,6 +1,3 @@
-
-
-
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import Stars from './Stars';

@@ -7,12 +7,20 @@ export function LoginModal() {
   const [pass, setPass] = useState('');
   const [err, setErr] = useState('');
 
-  const login = () => {
-    if(!email||!pass){setErr('Vui lòng nhập đầy đủ thông tin'); return;}
-    setUser({name:'Nguyễn Minh Anh', email, phone:'0901234567', id:1});
+  const login = async () => {
+  try {
+    const response = await axios.post('https://localhost/core/api/auth/login', {
+      email: email,
+      password: pass
+    });
+
+    setUser(response.data.user);
     setShowLogin(false);
-    showToast('Đăng nhập thành công! Chào mừng trở lại 👋');
-  };
+    showToast('Chào mừng bạn quay lại!');
+  } catch (error) {
+    setErr(error.response?.data?.message || 'Có lỗi xảy ra');
+  }
+};
 
   return (
     <div className="modal-backdrop" onClick={()=>setShowLogin(false)}>
@@ -41,9 +49,21 @@ export function RegisterModal() {
   const set = (k,v) => setForm(f=>({...f,[k]:v}));
 
   const register = () => {
-    if(!form.name||!form.email||!form.phone||!form.pass){setErr('Vui lòng điền đầy đủ thông tin'); return;}
-    if(form.pass!==form.confirm){setErr('Mật khẩu xác nhận không khớp'); return;}
-    setUser({name:form.name, email:form.email, phone:form.phone, id:Date.now()});
+    if(!form.name||!form.email||!form.phone||!form.pass){
+      setErr('Vui lòng điền đầy đủ thông tin'); 
+      return;
+    }
+    if(form.pass!==form.confirm){
+      setErr('Mật khẩu xác nhận không khớp'); 
+      return;
+    }
+    setUser({
+      name:form.name, 
+      email:form.email, 
+      phone:form.phone, 
+      id:Date.now()
+    });
+    
     setShowRegister(false);
     showToast('Đăng ký thành công! Chào mừng bạn đến với Mộng Lan 🌸');
   };

@@ -6,6 +6,7 @@ import { LoginModal, RegisterModal } from './components/AuthModals';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import { SearchPage } from './pages/Search';
+import { CategoryPage } from './pages/Category';
 import { ProductDetailPage } from './pages/ProductDetail';
 import { ProfilePage } from './pages/Profile';
 import { ContactPage } from './pages/Contact';
@@ -18,6 +19,7 @@ function App() {
       case 'home': return <Home />;
       case 'cart': return <Cart />;
       case 'search': return <SearchPage />;
+      case 'category': return <CategoryPage />;
       case 'product': return <ProductDetailPage />;
       case 'profile': return <ProfilePage />;
       case 'contact': return <ContactPage />;

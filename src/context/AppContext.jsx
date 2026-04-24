@@ -1,17 +1,57 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
 export const AppContext = createContext();
 
 export function AppProvider({children}) {
   const [page, setPage] = useState('home');
   const [pageParams, setPageParams] = useState({});
-  const [cart, setCart] = useState([]);
-  const [user, setUser] = useState(null);
-  const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem('flowershop_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('flowershop_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [wishlist, setWishlist] = useState(() => {
+    try {
+      const saved = localStorage.getItem('flowershop_wishlist');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [orders, setOrders] = useState([]);
   const [toast, setToast] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+
+  // Save user to localStorage whenever it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('flowershop_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('flowershop_user');
+    }
+  }, [user]);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('flowershop_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  // Save wishlist to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('flowershop_wishlist', JSON.stringify(wishlist));
+  }, [wishlist]);
 
   const navigate = (p, params={}) => {setPage(p); setPageParams(params); window.scrollTo(0,0)};
 

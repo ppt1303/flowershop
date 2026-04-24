@@ -3,13 +3,21 @@ import { AppContext } from '../context/AppContext';
 import { CATEGORIES } from '../data/flowerData';
 
 export default function Header() {
-  const {navigate, cartCount, user, setShowLogin, setUser} = useContext(AppContext);
+  const {navigate, cartCount, user, setShowLogin, setUser, showToast} = useContext(AppContext);
   const [search, setSearch] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
 
   const doSearch = (e) => {
     e.preventDefault();
-    if(search.trim()) {navigate('search',{q:search}); setSearch('');}
+    if(search.trim()) {
+      navigate('search',{q:search}); 
+      setSearch('');
+    }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    showToast('Đã đăng xuất! Hẹn gặp lại bạn 👋');
   };
 
   return (
@@ -35,7 +43,7 @@ export default function Header() {
           {user ? (
             <div style={{display:'flex',gap:8,alignItems:'center'}}>
               <button className="btn btn-ghost" onClick={()=>navigate('profile')} style={{fontSize:13}}>👤 {user.name.split(' ').pop()}</button>
-              <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>setUser(null)}>Đăng xuất</button>
+              <button className="btn btn-ghost" style={{fontSize:13}} onClick={handleLogout}>Đăng xuất</button>
             </div>
           ) : (
             <button className="btn btn-outline" onClick={()=>setShowLogin(true)} style={{whiteSpace:'nowrap'}}>Đăng nhập</button>
